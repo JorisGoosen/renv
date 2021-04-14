@@ -45,6 +45,9 @@ renv_path_normalize_win32 <- function(path,
                                       winslash = "/",
                                       mustWork = FALSE)
 {
+  if(path == "")
+    stop("Path to normalize is empty") #No point normalizing if there is no path, especially no point in asking for shortpath if it doesn't exist
+
   # get encoding for this set of paths
   enc <- Encoding(path)
 
