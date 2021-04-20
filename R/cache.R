@@ -127,12 +127,10 @@ renv_cache_synchronize <- function(record, linkable = FALSE) {
   # construct cache entry
   cache <- renv_cache_find(record)
 
-  copied <- FALSE
-  for (cachePath in cache) {
-    copied <- renv_cache_synchronize_inner(cachePath, record, linkable, path)
-    if (copied)
+  for (cachePath in cache) 
+    if (renv_cache_synchronize_inner(cachePath, record, linkable, path))
       return(TRUE)
-  }
+  
   return(FALSE)
 
 }
