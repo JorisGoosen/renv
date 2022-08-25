@@ -60,12 +60,13 @@
 #' renv::hydrate()
 #'
 #' }
-hydrate <- function(packages = NULL,
+hydrate <- function(packages  = NULL,
                     ...,
-                    library = NULL,
-                    update  = FALSE,
-                    sources = NULL,
-                    project = NULL)
+                    library   = NULL,
+                    update    = FALSE,
+                    sources   = NULL,
+                    project   = NULL,
+                    recursive = TRUE)
 {
   renv_scope_error_handler()
   renv_dots_check(...)
@@ -102,7 +103,7 @@ hydrate <- function(packages = NULL,
     renv_hydrate_copy_packages(packages, library)
 
   # attempt to install missing packages (if any)
-  missing <- renv_hydrate_resolve_missing(project, na)
+  missing <- renv_hydrate_resolve_missing(project, na, recursive)
 
   # we're done!
   result <- list(packages = packages, missing = missing)
@@ -271,7 +272,7 @@ renv_hydrate_copy_packages <- function(packages, library) {
   copied
 }
 
-renv_hydrate_resolve_missing <- function(project, na) {
+renv_hydrate_resolve_missing <- function(project, na, recursive) {
 
   # resolve library paths
   library <- renv_paths_library(project = project)
@@ -300,7 +301,8 @@ renv_hydrate_resolve_missing <- function(project, na) {
     project  = project,
     library  = library,
     packages = packages,
-    handler  = handler
+    handler  = handler,
+    recursive= recursive
   )
 
   records <- retrieve(packages)
